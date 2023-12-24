@@ -1,0 +1,7 @@
+{
+  "name": "capacitor-svelte-poc",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}
