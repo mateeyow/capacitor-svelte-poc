@@ -1,4 +1,3 @@
-// import { faker } from '@faker-js/faker';
 // import prisma from '$lib/prisma';
 // import type { PageServerLoad } from './$types';
 
@@ -20,6 +19,7 @@
 // 		});
 // 	}
 // };
+import { faker } from '@faker-js/faker';
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -31,6 +31,25 @@ export const GET: RequestHandler = async () => {
 		return new Response(JSON.stringify(data));
 	} catch (err) {
 		console.error('Error getting notifications', err);
+		if (err instanceof Error) {
+			error(500, err.message);
+		} else {
+			error(500, 'Unknown error');
+		}
+	}
+};
+
+export const POST: RequestHandler = async () => {
+	try {
+		await prisma.notification.create({
+			data: {
+				message: faker.lorem.paragraph()
+			}
+		});
+
+		return new Response(JSON.stringify({ success: true }));
+	} catch (err) {
+		console.error('Error creating notification', err);
 		if (err instanceof Error) {
 			error(500, err.message);
 		} else {

@@ -9,12 +9,29 @@
 	let data: Notification[] = [];
 
 	const loadData = async () => {
-		const response = await fetch('/api/notifications', {
+		const response = await fetch('http://192.168.0.109:5173/api/notifications', {
 			method: 'GET'
 		});
 
+		if (!response.ok) {
+			return console.error('failed to load notifications');
+		}
+
 		data = await response.json();
 		console.log('data', data);
+	};
+
+	const createNotification = async () => {
+		const response = await fetch('http://192.168.0.109:5173/api/notifications', {
+			method: 'POST'
+		});
+
+		if (!response.ok) {
+			return console.error('failed to create notifications');
+		}
+
+		console.info('successfully created notification');
+		await loadData();
 	};
 
 	onMount(() => {
@@ -24,9 +41,9 @@
 
 <div class="p-12 text-center m-4 rounded-md shadow-md bg-slate-100">Hello</div>
 
-<form method="POST" action="?/create">
-	<button class="bg-emerald-400 p-2 text-white rounded-md">Create Notification</button>
-</form>
+<button class="bg-emerald-400 p-2 text-white rounded-md" on:click={createNotification}
+	>Create Notification</button
+>
 
 {#if data.length > 0}
 	<div>
